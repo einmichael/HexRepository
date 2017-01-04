@@ -60,8 +60,8 @@ public class Hex extends JFrame {
 
         hex.addMouseWheelListener(new MouseWheelListener() {
             public void mouseWheelMoved(MouseWheelEvent e) {
-                if(e.getWheelRotation() > 0)  ++a;
-                else --a;
+                if(e.getWheelRotation() > 0) a-=5;
+                else a+=5;
                 hex.repaint();
 
             }
