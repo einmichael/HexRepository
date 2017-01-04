@@ -7,11 +7,12 @@ package hex;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import java.awt.Graphics;
+
 
 /**
  *
@@ -20,22 +21,10 @@ import java.awt.Graphics;
 public class Hex extends JFrame {
 
     public static Hex hex;
-    public JPanel panel;
+    public static JPanel panel;
     
     public Hex(String s){
         super(s);
-        panel=new JPanel(){
-            @Override
-            public void paintComponent(Graphics g){
-                g.setColor(Color.red);
-                super.paintComponent(g);
-                g.drawRect(100,100,200,400);
-            }
-        };
-        
-        this.add(panel);
-        panel.setVisible(true);
-        this.repaint();
     }
     /*    *
      * @param args the command line arguments
@@ -48,6 +37,21 @@ public class Hex extends JFrame {
         hex.setPreferredSize(new Dimension(500,500));
         hex.pack();
         hex.setVisible(true);
+        hex.repaint();
+        panel=new JPanel(){
+            @Override
+            public void paintComponent(Graphics g){
+                super.paintComponent(g);
+                g.setColor(Color.red);
+                g.fillRect(100,100,200,400);
+                System.out.println("ASDF");
+            }
+        };
+        
+        hex.add(panel);
+        panel.setVisible(true);
+        hex.repaint();
+        panel.repaint();
         
         hex.addWindowListener(new WindowAdapter(){
             @Override
