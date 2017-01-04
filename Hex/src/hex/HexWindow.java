@@ -8,7 +8,7 @@ package hex;
 import javax.swing.JFrame;
 
 /**
- * Andreaschnuffel
+ * 
  * @author faust
  */
 public class HexWindow extends JFrame{
