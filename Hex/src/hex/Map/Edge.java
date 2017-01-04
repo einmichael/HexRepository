@@ -9,6 +9,6 @@ package hex.Map;
  *
  * @author michael.faust
  */
-public class Tile extends MapElement {
+public class Edge {
     
 }
