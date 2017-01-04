@@ -5,11 +5,13 @@
  */
 package hex;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.awt.Graphics;
 
 /**
  *
@@ -18,11 +20,22 @@ import javax.swing.JPanel;
 public class Hex extends JFrame {
 
     public static Hex hex;
+    public JPanel panel;
+    
     public Hex(String s){
         super(s);
-        this.add(new JPanel(){
-            
-        });
+        panel=new JPanel(){
+            @Override
+            public void paintComponent(Graphics g){
+                g.setColor(Color.red);
+                super.paintComponent(g);
+                g.drawRect(100,100,200,400);
+            }
+        };
+        
+        this.add(panel);
+        panel.setVisible(true);
+        this.repaint();
     }
     /*    *
      * @param args the command line arguments
