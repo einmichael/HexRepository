@@ -24,8 +24,9 @@ public class Hex extends JFrame {
             
         });
     }
-    /**
+    /*    *
      * @param args the command line arguments
+    *
      */
     public static void main(String[] args) {
         hex =  new Hex("Sim");
