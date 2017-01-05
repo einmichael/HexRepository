@@ -7,7 +7,7 @@ package hex.Map;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
+import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -16,7 +16,7 @@ import java.util.Iterator;
  * @author faust
  */
 public class Map {
-    
+
     public static Map map;
 
     public ArrayList tiles = new ArrayList<Tile>();
@@ -28,9 +28,10 @@ public class Map {
 
     private int x, y, scale = new Integer(0);
     private int scale3SQRT = new Integer(0);
+    private int scaleHalf = new Integer(0);
 
     public Map(int x, int y, int scale) {
-        map=this;
+        map = this;
         //System.out.println("Konstruktor");
         this.x = new Integer(x);
         this.y = new Integer(y);
@@ -38,43 +39,58 @@ public class Map {
         makePoints(scale);
         makeTiles();
         hookUpTiles();
+        makePolygonsForTiles();
+        
+        
+            
+        
 
     }
     
-    private void hookUpTiles(){
+    public void refresh(int scale){
+        makePoints(scale);
+        makePolygonsForTiles();
+    }
+
+    private void hookUpTiles() {
         Iterator<Tile> tileIterator = tiles.iterator();
-       while (tileIterator.hasNext()) {
+        while (tileIterator.hasNext()) {
             tileIterator.next().hookUp();
+            
+        }
+    }
+    private void makePolygonsForTiles() {
+        Iterator<Tile> tileIterator = tiles.iterator();
+        while (tileIterator.hasNext()) {
+            tileIterator.next().makePolygon();
+            
         }
     }
 
     private void makeTiles() {
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
-                tiles.add(new Tile(i,j));
+                tiles.add(new Tile(i, j));
             }
         }
 
     }
 
-    public void makePoints(int scale) {
+    private void makePoints(int scale) {
         this.scale = scale;
         this.scale3SQRT = (int) (Math.sqrt(3) * ((double) scale / 2));
+        this.scaleHalf = scale / 2;
         //x
-        xPoints = new int[2 * x + 2];
+        xPoints = new int[3 * x + 2];
         yPoints = new int[2 * y + 2];
-        for (int i = 0; i < (2 * x + 2); i++) {
+        for (int i = 0; i < (3 * x + 2); i++) {
             if (i == 0) {
                 xPoints[i] = new Integer(0);
             } else //gerade
-             if (i % 2 == 0) {
-                    xPoints[i] = new Integer(xPoints[i - 1] + this.scale);
-                } else //ungerade
-                {
-                    xPoints[i] = new Integer(xPoints[i - 1] + this.scale / 2);
-                }
+            {
+                xPoints[i] = new Integer(xPoints[i - 1] + this.scaleHalf);
+            }
         }
-
         //y
         for (int i = 0; i < (2 * y + 2); i++) {
             if (i == 0) {
@@ -86,17 +102,39 @@ public class Map {
         }
     }
     
-  
+    public Polygon makePolygon(Tile tile){
+        return makePolygon(tile.getX(), tile.getY());
+    }
+    public Polygon makePolygon(int x, int y){
+        Polygon p =  new Polygon();
+        if(x%2==0){
+        p.addPoint(xPoints[3*x+1], yPoints[2*y]);
+        p.addPoint(xPoints[3*x+3], yPoints[2*y]);
+        p.addPoint(xPoints[3*x+4], yPoints[2*y+1]);
+        p.addPoint(xPoints[3*x+3], yPoints[2*y+2]);
+        p.addPoint(xPoints[3*x+1], yPoints[2*y+2]);
+        p.addPoint(xPoints[3*x], yPoints[2*y+1]);}
+        else{
+        p.addPoint(xPoints[3*x+1], yPoints[2*y+1]);
+        p.addPoint(xPoints[3*x+3], yPoints[2*y+1]);
+        p.addPoint(xPoints[3*x+4], yPoints[2*y+2]);
+        p.addPoint(xPoints[3*x+3], yPoints[2*y+3]);
+        p.addPoint(xPoints[3*x+1], yPoints[2*y+3]);
+        p.addPoint(xPoints[3*x], yPoints[2*y+2]);
+        }
+        return p;
+    }
+
     public void drawPoints(Graphics g) {
         g.setColor(Color.red);
-        for (int i = 0; i < (2 * x + 2); i++) {
+        for (int i = 0; i < (3 * x + 2); i++) {
             for (int j = 0; j < (2 * y + 2); j++) {
                 g.drawRect(xPoints[i], yPoints[j], 1, 1);
             }
         }
 
-        Iterator<Tile> tileIterator = tiles.iterator();
-       while (tileIterator.hasNext()) {
+       Iterator<Tile> tileIterator = tiles.iterator();
+        while (tileIterator.hasNext()) {
             tileIterator.next().drawElement(g);
         }
     }
@@ -109,8 +147,11 @@ public class Map {
         return y;
     }
 
-    public Tile getTile(int x, int y){
-        return (Tile) tiles.get(y*this.x + x);
+    public Tile getTile(int x, int y) {
+        if(x>=0 && x <= this.x && y >= 0 && y <= this.y){
+               
+        return (Tile) tiles.get(y * this.x + x);}
+        else return null;
     }
-    
+
 }

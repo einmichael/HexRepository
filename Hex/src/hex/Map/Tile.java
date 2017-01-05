@@ -7,6 +7,7 @@ package hex.Map;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Polygon;
 
 /**
  *
@@ -15,6 +16,7 @@ import java.awt.Graphics;
 public class Tile extends MapElement {
     
     public static int number=new Integer(0);
+    public Polygon polygon;
     
     private Tile neighborN, neighborNE, neighborSE, neighborS, neighborSW, neighborNW;
     private int x = new Integer(0), y = new Integer (0);
@@ -61,18 +63,28 @@ public class Tile extends MapElement {
         return Map.map.getTile(x,y);
     }
     
+    public void makePolygon(){
+        this.polygon=Map.map.makePolygon(this);
+    }
+    
     @Override
     public void drawElement(Graphics g){
         g.setColor(Color.blue);
-        g.fillRect(50*x, 50*y, 40, 40);
+        g.fillPolygon(polygon);
+        g.setColor(Color.pink);
+        g.drawPolygon(polygon);
+        /*
         //debug
+        g.setColor(Color.blue);
+        g.fillRect(50*x, 50*y, 40, 40);
+        
         g.setColor(Color.MAGENTA);
         if(neighborN!=null) g.fillRect(50*x+15, 50*y, 10, 5);
         if(neighborS!=null) g.fillRect(50*x+15, 50*y+35, 10, 5);
         if(neighborNE!=null) g.fillRect(50*x+30, 50*y, 10, 5);
         if(neighborNW!=null) g.fillRect(50*x, 50*y, 10, 5);
         if(neighborSE!=null) g.fillRect(50*x+30, 50*y+35, 10, 5);
-        if(neighborSW!=null) g.fillRect(50*x, 50*y+35, 10, 5);
+        if(neighborSW!=null) g.fillRect(50*x, 50*y+35, 10, 5);*/
     }
 
     public int getX() {

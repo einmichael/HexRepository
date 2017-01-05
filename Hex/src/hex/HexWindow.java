@@ -33,7 +33,7 @@ public class HexWindow extends JFrame{
     public HexWindow(String s){
         super(s);
            
-        map = new Map (15,4,a);
+        map = new Map (5,9,a);
        
 
         setLocation(250, 250);
@@ -62,15 +62,12 @@ public class HexWindow extends JFrame{
             public void mouseWheelMoved(MouseWheelEvent e) {
                 if(e.getWheelRotation() > 0){
                     a-=3;
-                    map.makePoints(a);
                 }
                 else {
                     a+=3;
-                    map.makePoints(a);
-                
                 }
+                map.refresh(a);
                 repaint();
-
             }
         });
 
