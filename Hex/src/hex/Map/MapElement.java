@@ -5,10 +5,16 @@
  */
 package hex.Map;
 
+import java.awt.Graphics;
+
 /**
  *
  * @author michael.faust
  */
-public class MapElement {
+public abstract class MapElement {
+    
+    public void drawElement(Graphics g){
+    
+    }
     
 }
