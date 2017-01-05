@@ -5,8 +5,10 @@
  */
 package hex.Map;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Polygon;
 
 /**
@@ -17,22 +19,26 @@ public class Tile extends MapElement {
     
     public static int number=new Integer(0);
     public Polygon polygon;
+    public Color color = Color.blue;
     
     private Tile neighborN, neighborNE, neighborSE, neighborS, neighborSW, neighborNW;
     private int x = new Integer(0), y = new Integer (0);
     
     public Tile (int x, int y){
         super();
-        System.out.println(" " +number++);
+        //System.out.println(" " +number++);
         this.x=x;
         this.y=y;
-        
     }
     
+    /**
+     * legt alle Nachbarn an
+     */
     public void hookUp(){
         //N und S
         neighborN=checkNeighbor(this.x, this.y-1);
         neighborS=checkNeighbor(this.x, this.y+1);
+        //System.out.println("neighbor south" + neighborS);
         //gerade Spalten "hoch"
         if(this.x%2==0){
             neighborNE=checkNeighbor(this.x+1, this.y-1);
@@ -56,10 +62,14 @@ public class Tile extends MapElement {
      * @return 
      */
     private Tile checkNeighbor(int x, int y){
-        if (x<0) return null;
-        if (y<0) return null;
-        if (x>=Map.map.getX()) return null;
-        if (y>=Map.map.getY()) return null;
+        Tile t;
+        //System.out.println("x: "+x+ " y: "+y);
+        if (x<0 || y<0 || x>=Map.map.getX()||y>=Map.map.getY()) {
+            t= null;
+            return t;
+        }
+        else
+        
         return Map.map.getTile(x,y);
     }
     
@@ -67,24 +77,21 @@ public class Tile extends MapElement {
         this.polygon=Map.map.makePolygon(this);
     }
     
+    public void colorNeighbors(){
+        if(neighborN!=null)neighborN.color=Color.orange;
+        if(neighborS!=null)neighborS.color=Color.green;
+        if(neighborSE!=null)neighborSE.color=Color.green;
+        if(neighborNE!=null)neighborNE.color=Color.green;
+    }
+    
     @Override
     public void drawElement(Graphics g){
-        g.setColor(Color.blue);
+        g.setColor(color);
         g.fillPolygon(polygon);
-        g.setColor(Color.pink);
-        g.drawPolygon(polygon);
-        /*
-        //debug
-        g.setColor(Color.blue);
-        g.fillRect(50*x, 50*y, 40, 40);
-        
-        g.setColor(Color.MAGENTA);
-        if(neighborN!=null) g.fillRect(50*x+15, 50*y, 10, 5);
-        if(neighborS!=null) g.fillRect(50*x+15, 50*y+35, 10, 5);
-        if(neighborNE!=null) g.fillRect(50*x+30, 50*y, 10, 5);
-        if(neighborNW!=null) g.fillRect(50*x, 50*y, 10, 5);
-        if(neighborSE!=null) g.fillRect(50*x+30, 50*y+35, 10, 5);
-        if(neighborSW!=null) g.fillRect(50*x, 50*y+35, 10, 5);*/
+        Graphics2D g2d = (Graphics2D) g;
+         g2d.setStroke(new BasicStroke(3, BasicStroke.CAP_SQUARE, BasicStroke.CAP_BUTT));
+        g2d.setColor(Color.gray);
+        g2d.drawPolygon(polygon);
     }
 
     public int getX() {

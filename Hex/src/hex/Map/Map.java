@@ -26,7 +26,7 @@ public class Map {
     private int[] xPoints;
     private int[] yPoints;
 
-    private int x, y, scale = new Integer(0);
+    private int mouseX, mouseY, x, y, scale = new Integer(0);
     private int scale3SQRT = new Integer(0);
     private int scaleHalf = new Integer(0);
 
@@ -36,9 +36,12 @@ public class Map {
         this.x = new Integer(x);
         this.y = new Integer(y);
         this.scale = scale;
-        makePoints(scale);
+         makePoints(scale);
         makeTiles();
         hookUpTiles();
+        
+       
+        
         makePolygonsForTiles();
         
         
@@ -47,15 +50,41 @@ public class Map {
 
     }
     
+    public void updateMouse(int mouseX, int mouseY){
+        this.mouseX=mouseX;
+        this.mouseY=mouseY;
+        Tile t;
+        Iterator<Tile> tileIteratorClear = tiles.iterator();
+        while (tileIteratorClear.hasNext()) {
+            tileIteratorClear.next().color=Color.blue;
+        }
+        Iterator<Tile> tileIterator = tiles.iterator();
+        while (tileIterator.hasNext()) {
+            t=tileIterator.next();
+            if(t.polygon.contains(mouseX, mouseY)){
+                t.color=Color.RED;
+                t.colorNeighbors();
+                break;
+            }else t.color=Color.blue;
+            
+        }
+    }
+    
     public void refresh(int scale){
         makePoints(scale);
         makePolygonsForTiles();
     }
 
     private void hookUpTiles() {
+        Tile t;
         Iterator<Tile> tileIterator = tiles.iterator();
         while (tileIterator.hasNext()) {
-            tileIterator.next().hookUp();
+            
+            t=tileIterator.next();
+            System.out.println("processing..." + t.getX() + " " + t.getY());
+            
+            t.hookUp();
+            
             
         }
     }
@@ -133,7 +162,10 @@ public class Map {
             }
         }
 
-       Iterator<Tile> tileIterator = tiles.iterator();
+       
+    }
+    public void drawPolygons(Graphics g) {
+        Iterator<Tile> tileIterator = tiles.iterator();
         while (tileIterator.hasNext()) {
             tileIterator.next().drawElement(g);
         }
@@ -148,9 +180,19 @@ public class Map {
     }
 
     public Tile getTile(int x, int y) {
+        System.out.println("Map getTile mit x/y "+x+y);
+        Tile t;
         if(x>=0 && x <= this.x && y >= 0 && y <= this.y){
-               
-        return (Tile) tiles.get(y * this.x + x);}
+            
+        Iterator<Tile> tileIterator = tiles.iterator();
+        while (tileIterator.hasNext()) {
+            t=tileIterator.next();
+            if(t.getX()==x && t.getY()==y){
+                //System.out.println("jo, gefunen!");
+                return t;
+            }
+        } return null;
+        }
         else return null;
     }
 

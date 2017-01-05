@@ -11,6 +11,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
@@ -29,11 +31,13 @@ public class HexWindow extends JFrame{
     public static int a = new Integer(50);
     private static Map map;
     
+    public int mouseX, mouseY;
+    
         
     public HexWindow(String s){
         super(s);
            
-        map = new Map (5,9,a);
+        map = new Map (5,4,a);
        
 
         setLocation(250, 250);
@@ -50,7 +54,12 @@ public class HexWindow extends JFrame{
                 //debug
                 g.setColor(new Color(215,215,225));
                 g.fillRect(0,0,BREIT, HOCH);
-                map.drawPoints(g);
+                //map.drawPoints(g);
+                map.drawPolygons(g);
+                
+                g.setColor(Color.black);
+                g.drawString("x/y: " + mouseX + "/" + mouseY, BREIT-100, HOCH-20);
+             
             }
         };
 
@@ -69,6 +78,24 @@ public class HexWindow extends JFrame{
                 map.refresh(a);
                 repaint();
             }
+        });
+        
+        panel.addMouseMotionListener(new MouseMotionListener(){
+            @Override
+            public void mouseMoved(MouseEvent e){
+               
+                mouseX=e.getX();
+                mouseY=e.getY();
+                repaint();
+                Map.map.updateMouse(mouseX, mouseY);
+            }
+            @Override
+            public void mouseDragged(MouseEvent e){
+                mouseX=e.getX();
+                mouseY=e.getY();
+            }
+            
+            
         });
 
         addWindowListener(new WindowAdapter() {
