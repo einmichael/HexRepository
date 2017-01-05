@@ -7,6 +7,7 @@ package hex.Map;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -74,8 +75,8 @@ public class Map {
                 }
         }
 
-        //xy
-        for (int i = 0; i < (2 * x + 2); i++) {
+        //y
+        for (int i = 0; i < (2 * y + 2); i++) {
             if (i == 0) {
                 yPoints[i] = new Integer(0);
             } else {
@@ -84,7 +85,8 @@ public class Map {
 
         }
     }
-
+    
+  
     public void drawPoints(Graphics g) {
         g.setColor(Color.red);
         for (int i = 0; i < (2 * x + 2); i++) {

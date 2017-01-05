@@ -33,7 +33,7 @@ public class HexWindow extends JFrame{
     public HexWindow(String s){
         super(s);
            
-        map = new Map (5,5,a);
+        map = new Map (15,4,a);
        
 
         setLocation(250, 250);

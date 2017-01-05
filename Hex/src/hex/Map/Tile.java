@@ -33,10 +33,26 @@ public class Tile extends MapElement {
         neighborS=checkNeighbor(this.x, this.y+1);
         //gerade Spalten "hoch"
         if(this.x%2==0){
-            
+            neighborNE=checkNeighbor(this.x+1, this.y-1);
+            neighborSE=checkNeighbor(this.x+1, this.y);
+            neighborSW=checkNeighbor(this.x-1, this.y);
+            neighborNW=checkNeighbor(this.x-1, this.y-1);
+        //ungerade Spalte "tief"
+        }else{
+            neighborNE=checkNeighbor(this.x+1, this.y);
+            neighborSE=checkNeighbor(this.x+1, this.y+1);
+            neighborSW=checkNeighbor(this.x-1, this.y+1);
+            neighborNW=checkNeighbor(this.x-1, this.y);
         }
     }
     
+    /**
+     * Returns the tile of the Map on (x,y), if x and y are in bounds.
+     * Else null.
+     * @param x
+     * @param y
+     * @return 
+     */
     private Tile checkNeighbor(int x, int y){
         if (x<0) return null;
         if (y<0) return null;
@@ -47,9 +63,25 @@ public class Tile extends MapElement {
     
     @Override
     public void drawElement(Graphics g){
-        if(neighborN!=null) g.setColor(Color.green);
-        else g.setColor(Color.MAGENTA);
-        g.fillRect(15*x, 15*y, 10, 10);
-        
+        g.setColor(Color.blue);
+        g.fillRect(50*x, 50*y, 40, 40);
+        //debug
+        g.setColor(Color.MAGENTA);
+        if(neighborN!=null) g.fillRect(50*x+15, 50*y, 10, 5);
+        if(neighborS!=null) g.fillRect(50*x+15, 50*y+35, 10, 5);
+        if(neighborNE!=null) g.fillRect(50*x+30, 50*y, 10, 5);
+        if(neighborNW!=null) g.fillRect(50*x, 50*y, 10, 5);
+        if(neighborSE!=null) g.fillRect(50*x+30, 50*y+35, 10, 5);
+        if(neighborSW!=null) g.fillRect(50*x, 50*y+35, 10, 5);
     }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+    
+    
 }
