@@ -36,41 +36,35 @@ public class Map {
         this.x = new Integer(x);
         this.y = new Integer(y);
         this.scale = scale;
-         makePoints(scale);
+        makePoints(scale);
         makeTiles();
-        hookUpTiles();
-        
-       
-        
         makePolygonsForTiles();
-        
-        
-            
-        
-
+        hookUpTiles();
     }
-    
-    public void updateMouse(int mouseX, int mouseY){
-        this.mouseX=mouseX;
-        this.mouseY=mouseY;
+
+    public void updateMouse(int mouseX, int mouseY) {
+        this.mouseX = mouseX;
+        this.mouseY = mouseY;
         Tile t;
         Iterator<Tile> tileIteratorClear = tiles.iterator();
         while (tileIteratorClear.hasNext()) {
-            tileIteratorClear.next().color=Color.blue;
+            tileIteratorClear.next().color = Color.blue;
         }
         Iterator<Tile> tileIterator = tiles.iterator();
         while (tileIterator.hasNext()) {
-            t=tileIterator.next();
-            if(t.polygon.contains(mouseX, mouseY)){
-                t.color=Color.RED;
+            t = tileIterator.next();
+            if (t.polygon.contains(mouseX, mouseY)) {
+                t.color = Color.RED;
                 t.colorNeighbors();
                 break;
-            }else t.color=Color.blue;
-            
+            } else {
+                t.color = Color.blue;
+            }
+
         }
     }
-    
-    public void refresh(int scale){
+
+    public void refresh(int scale) {
         makePoints(scale);
         makePolygonsForTiles();
     }
@@ -79,20 +73,15 @@ public class Map {
         Tile t;
         Iterator<Tile> tileIterator = tiles.iterator();
         while (tileIterator.hasNext()) {
-            
-            t=tileIterator.next();
-            System.out.println("processing..." + t.getX() + " " + t.getY());
-            
+            t = tileIterator.next();
             t.hookUp();
-            
-            
         }
     }
+
     private void makePolygonsForTiles() {
         Iterator<Tile> tileIterator = tiles.iterator();
         while (tileIterator.hasNext()) {
             tileIterator.next().makePolygon();
-            
         }
     }
 
@@ -130,26 +119,27 @@ public class Map {
 
         }
     }
-    
-    public Polygon makePolygon(Tile tile){
+
+    public Polygon makePolygon(Tile tile) {
         return makePolygon(tile.getX(), tile.getY());
     }
-    public Polygon makePolygon(int x, int y){
-        Polygon p =  new Polygon();
-        if(x%2==0){
-        p.addPoint(xPoints[3*x+1], yPoints[2*y]);
-        p.addPoint(xPoints[3*x+3], yPoints[2*y]);
-        p.addPoint(xPoints[3*x+4], yPoints[2*y+1]);
-        p.addPoint(xPoints[3*x+3], yPoints[2*y+2]);
-        p.addPoint(xPoints[3*x+1], yPoints[2*y+2]);
-        p.addPoint(xPoints[3*x], yPoints[2*y+1]);}
-        else{
-        p.addPoint(xPoints[3*x+1], yPoints[2*y+1]);
-        p.addPoint(xPoints[3*x+3], yPoints[2*y+1]);
-        p.addPoint(xPoints[3*x+4], yPoints[2*y+2]);
-        p.addPoint(xPoints[3*x+3], yPoints[2*y+3]);
-        p.addPoint(xPoints[3*x+1], yPoints[2*y+3]);
-        p.addPoint(xPoints[3*x], yPoints[2*y+2]);
+
+    public Polygon makePolygon(int x, int y) {
+        Polygon p = new Polygon();
+        if (x % 2 == 0) {
+            p.addPoint(xPoints[3 * x + 1], yPoints[2 * y]);
+            p.addPoint(xPoints[3 * x + 3], yPoints[2 * y]);
+            p.addPoint(xPoints[3 * x + 4], yPoints[2 * y + 1]);
+            p.addPoint(xPoints[3 * x + 3], yPoints[2 * y + 2]);
+            p.addPoint(xPoints[3 * x + 1], yPoints[2 * y + 2]);
+            p.addPoint(xPoints[3 * x], yPoints[2 * y + 1]);
+        } else {
+            p.addPoint(xPoints[3 * x + 1], yPoints[2 * y + 1]);
+            p.addPoint(xPoints[3 * x + 3], yPoints[2 * y + 1]);
+            p.addPoint(xPoints[3 * x + 4], yPoints[2 * y + 2]);
+            p.addPoint(xPoints[3 * x + 3], yPoints[2 * y + 3]);
+            p.addPoint(xPoints[3 * x + 1], yPoints[2 * y + 3]);
+            p.addPoint(xPoints[3 * x], yPoints[2 * y + 2]);
         }
         return p;
     }
@@ -162,8 +152,8 @@ public class Map {
             }
         }
 
-       
     }
+
     public void drawPolygons(Graphics g) {
         Iterator<Tile> tileIterator = tiles.iterator();
         while (tileIterator.hasNext()) {
@@ -180,20 +170,19 @@ public class Map {
     }
 
     public Tile getTile(int x, int y) {
-        System.out.println("Map getTile mit x/y "+x+y);
         Tile t;
-        if(x>=0 && x <= this.x && y >= 0 && y <= this.y){
-            
-        Iterator<Tile> tileIterator = tiles.iterator();
-        while (tileIterator.hasNext()) {
-            t=tileIterator.next();
-            if(t.getX()==x && t.getY()==y){
-                //System.out.println("jo, gefunen!");
-                return t;
+        if (x >= 0 && x <= this.x && y >= 0 && y <= this.y) {
+            Iterator<Tile> tileIterator = tiles.iterator();
+            while (tileIterator.hasNext()) {
+                t = tileIterator.next();
+                if (t.getX() == x && t.getY() == y) {
+                    return t;
+                }
             }
-        } return null;
+            return null;
+        } else {
+            return null;
         }
-        else return null;
     }
 
 }

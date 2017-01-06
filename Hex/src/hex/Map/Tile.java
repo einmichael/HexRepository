@@ -17,16 +17,17 @@ import java.awt.Polygon;
  */
 public class Tile extends MapElement {
     
-    public static int number=new Integer(0);
+    //public static int number=new Integer(0);
     public Polygon polygon;
     public Color color = Color.blue;
     
-    private Tile neighborN, neighborNE, neighborSE, neighborS, neighborSW, neighborNW;
-    private int x = new Integer(0), y = new Integer (0);
+    private Tile 
+            neighborN, neighborNE, neighborSE, 
+            neighborS, neighborSW, neighborNW;
+    private int x, y;
     
     public Tile (int x, int y){
         super();
-        //System.out.println(" " +number++);
         this.x=x;
         this.y=y;
     }
@@ -38,7 +39,6 @@ public class Tile extends MapElement {
         //N und S
         neighborN=checkNeighbor(this.x, this.y-1);
         neighborS=checkNeighbor(this.x, this.y+1);
-        //System.out.println("neighbor south" + neighborS);
         //gerade Spalten "hoch"
         if(this.x%2==0){
             neighborNE=checkNeighbor(this.x+1, this.y-1);
@@ -54,22 +54,7 @@ public class Tile extends MapElement {
         }
     }
     
-    /**
-     * Returns the tile of the Map on (x,y), if x and y are in bounds.
-     * Else null.
-     * @param x
-     * @param y
-     * @return 
-     */
     private Tile checkNeighbor(int x, int y){
-        Tile t;
-        //System.out.println("x: "+x+ " y: "+y);
-        if (x<0 || y<0 || x>=Map.map.getX()||y>=Map.map.getY()) {
-            t= null;
-            return t;
-        }
-        else
-        
         return Map.map.getTile(x,y);
     }
     
@@ -82,6 +67,9 @@ public class Tile extends MapElement {
         if(neighborS!=null)neighborS.color=Color.green;
         if(neighborSE!=null)neighborSE.color=Color.green;
         if(neighborNE!=null)neighborNE.color=Color.green;
+        if(neighborSW!=null)neighborSW.color=Color.green;
+        if(neighborNW!=null)neighborNW.color=Color.green;
+        
     }
     
     @Override
