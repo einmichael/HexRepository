@@ -15,6 +15,9 @@ import java.util.Iterator;
  *
  * @author faust
  */
+
+//newcomment
+
 public class Map {
 
     public static Map map;
