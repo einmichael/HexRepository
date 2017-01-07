@@ -5,11 +5,13 @@
  */
 package hex;
 
+import Cont.PlFactory;
 import hex.Map.Map;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
@@ -70,6 +72,8 @@ public class HexWindow extends JFrame {
 
                 g.setColor(Color.black);
                 g.drawString("x/y: " + mouseX + "/" + mouseY, BREIT - 100, HOCH - 20);
+                
+                
 
             }
         };
@@ -112,6 +116,14 @@ public class HexWindow extends JFrame {
             }
 
         });
+        
+        panel.addMouseListener(new MouseAdapter(){
+           @Override
+           public void mousePressed(MouseEvent e){
+               PlFactory.INIT=true;
+               
+           }
+        });
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -119,6 +131,8 @@ public class HexWindow extends JFrame {
                 System.exit(0);
             }
         });
+        
+        PlFactory.getInstance().make();
 
     }
 

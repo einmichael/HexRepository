@@ -5,6 +5,9 @@
  */
 package hex.Map;
 
+import Cont.Neutral;
+import Cont.Pl;
+import Cont.PlFactory;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -20,6 +23,8 @@ public class Tile extends MapElement {
     //public static int number=new Integer(0);
     public Polygon polygon;
     public Color color = Color.blue;
+    public Pl controller;
+    public int bats= 0;
     
     private Tile 
             neighborN, neighborNE, neighborSE, 
@@ -30,6 +35,7 @@ public class Tile extends MapElement {
         super();
         this.x=x;
         this.y=y;
+        
     }
     
     /**
@@ -80,6 +86,11 @@ public class Tile extends MapElement {
          g2d.setStroke(new BasicStroke(3, BasicStroke.CAP_SQUARE, BasicStroke.CAP_BUTT));
         g2d.setColor(Color.gray);
         g2d.drawPolygon(polygon);
+        
+        if(PlFactory.INIT){
+            g.setColor(color.black);
+            g.drawString(Integer.toString(bats), polygon.xpoints[0]+20, polygon.ypoints[0]+20);
+        }
     }
 
     public int getX() {
