@@ -64,7 +64,7 @@ public class StatusPanel extends JPanel {
             }
 
         });
-        addMouseListener(HexWindow.mouseManager);
+        //addMouseListener(HexWindow.mouseManager);
 
     }
 

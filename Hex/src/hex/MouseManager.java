@@ -11,6 +11,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import myEvents.ScrollBroadcaster;
+import myEvents.ScrollEvent;
 
 /**
  *
@@ -66,6 +68,9 @@ public class MouseManager implements MouseListener, MouseMotionListener, MouseWh
                 } else {
                     HexWindow.a += 3;
                 }
+        System.out.println("mousewheelmoved"+e);
+                ScrollBroadcaster.getInstance().fire(new ScrollEvent(this,HexWindow.a));
+                
                 Map.map.refresh(HexWindow.a);
                 e.getComponent().repaint();
         

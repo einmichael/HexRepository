@@ -7,17 +7,26 @@ package hex;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import javax.swing.JComponent;
+import myEvents.ScrollBroadcaster;
+import myEvents.ScrollEvent;
+import myEvents.ScrollListener;
 
 /**
  *
  * @author faust
  */
-public class Obs {
+public class Obs implements ScrollListener {
     
     private int x,y;
     private int width, height;
+    @Override
+    public void scrollUpdate(ScrollEvent e){
+        System.out.println("Update empfangen!!!! " +e.getA() + " " + this);
+    }
     
+    public Obs(){
+        ScrollBroadcaster.getInstance().addScrollListener(this);
+    }
     public void render(Graphics g){
        
         g.setColor(Color.pink);

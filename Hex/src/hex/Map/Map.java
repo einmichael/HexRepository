@@ -38,7 +38,7 @@ public class Map {
 
     public Map(int x, int y, int scale) {
         map = this;
-        obs=new Obs();
+          obs=new Obs();
         //System.out.println("Konstruktor");
         this.x = new Integer(x);
         this.y = new Integer(y);

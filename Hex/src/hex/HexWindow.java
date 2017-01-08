@@ -87,7 +87,7 @@ public class HexWindow extends JFrame implements Runnable {
            }
         });
          */
-        addMouseListener(mouseManager);
+        //addMouseListener(mouseManager);
 
         addWindowListener(new WindowAdapter() {
             @Override

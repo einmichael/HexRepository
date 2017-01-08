@@ -49,7 +49,7 @@ public class GamePanel extends JPanel {
             
         });
         
-        addMouseListener(HexWindow.mouseManager);
+        //addMouseListener(HexWindow.mouseManager);
     }
     
     public void paintComponent(Graphics g) {
