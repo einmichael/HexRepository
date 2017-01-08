@@ -63,6 +63,7 @@ public class MouseManager implements MouseListener, MouseMotionListener, MouseWh
     
     @Override
     public void mouseWheelMoved(MouseWheelEvent e){
+        e.consume();
         if (e.getWheelRotation() > 0) {
                     HexWindow.a -= 3;
                 } else {
