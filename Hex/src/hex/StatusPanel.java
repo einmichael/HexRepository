@@ -21,13 +21,17 @@ import javax.swing.JLayeredPane;
 public class StatusPanel extends JPanel {
     
     public int mouseX, mouseY;
-
+    public static StatusPanel sp;
     public static final int xGap = 5, yGap = 5;
     public JLabel top;
     public GamePanel middle;
     public JLayeredPane pane;
 
+    public static void refresh(){
+        sp.repaint();
+    }
     public StatusPanel() {
+        sp=this;
         this.setLayout(new BorderLayout(xGap, yGap));
 
         top = new JLabel("TOP", JLabel.CENTER);

@@ -30,7 +30,9 @@ public class Hex {
     *
      */
     public static void main(String[] args) {
-        new HexWindow("Simulation");
+        
+        Thread thread = new Thread(new HexWindow("Simulation"));
+        thread.start();
         
     }
 }
