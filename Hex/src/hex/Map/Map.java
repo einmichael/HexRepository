@@ -26,6 +26,7 @@ public class Map {
     public ArrayList nodes = new ArrayList<Node>();
     public ArrayList edges = new ArrayList<Edge>();
 
+    //Points for Polygons, Intersection, Nodes
     private int[] xPoints;
     private int[] yPoints;
 
@@ -48,6 +49,11 @@ public class Map {
     public void updateMouse(int mouseX, int mouseY) {
         this.mouseX = mouseX;
         this.mouseY = mouseY;
+        
+        
+        
+        
+        //debug Color Refresh
         Tile t;
         Iterator<Tile> tileIteratorClear = tiles.iterator();
         while (tileIteratorClear.hasNext()) {
