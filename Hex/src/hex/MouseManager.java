@@ -15,7 +15,7 @@ import myEvents.ScrollBroadcaster;
 import myEvents.ScrollEvent;
 
 /**
- *
+ *asdf test kw2
  * @author faust
  */
 public class MouseManager implements MouseListener, MouseMotionListener, MouseWheelListener{
