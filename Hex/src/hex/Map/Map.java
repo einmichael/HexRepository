@@ -5,6 +5,7 @@
  */
 package hex.Map;
 
+import hex.Obs;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
@@ -21,11 +22,13 @@ import java.util.Iterator;
 public class Map {
 
     public static Map map;
+    public static Obs obs;
 
     public ArrayList tiles = new ArrayList<Tile>();
     public ArrayList nodes = new ArrayList<Node>();
     public ArrayList edges = new ArrayList<Edge>();
 
+    //Points for Polygons, Intersection, Nodes
     private int[] xPoints;
     private int[] yPoints;
 
@@ -35,6 +38,7 @@ public class Map {
 
     public Map(int x, int y, int scale) {
         map = this;
+          obs=new Obs();
         //System.out.println("Konstruktor");
         this.x = new Integer(x);
         this.y = new Integer(y);
@@ -48,6 +52,11 @@ public class Map {
     public void updateMouse(int mouseX, int mouseY) {
         this.mouseX = mouseX;
         this.mouseY = mouseY;
+        
+        
+        
+        
+        //debug Color Refresh
         Tile t;
         Iterator<Tile> tileIteratorClear = tiles.iterator();
         while (tileIteratorClear.hasNext()) {
@@ -162,6 +171,7 @@ public class Map {
         while (tileIterator.hasNext()) {
             tileIterator.next().drawElement(g);
         }
+        obs.render(g);
     }
 
     public int getX() {

@@ -5,37 +5,44 @@
  */
 package hex;
 
+import Cont.PlFactory;
 import hex.Map.Map;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Insets;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.Timer;
 
 /**
  *
  * @author faust
  */
-public class HexWindow extends JFrame {
+public class HexWindow extends JFrame implements Runnable {
+    public final static int TPS = 25;
 
     public final int BREIT = 500;
     public final int HOCH = 500;
-    public static JPanel panel;
+    public JLayeredPane layeredPane;
+    public StatusPanel statusPanel;
     public static int a = new Integer(50);
     private static Map map;
 
     public int mouseX, mouseY;
 
+    public static MouseManager mouseManager;
+    public static KeyManager keyManager;
+
     public HexWindow(String s) {
+
         super(s);
+        mouseManager = new MouseManager();
+        keyManager = new KeyManager();
+        addKeyListener(keyManager);
         int input = new Integer(0);
         boolean valid = false;
         String name;
@@ -43,7 +50,9 @@ public class HexWindow extends JFrame {
             name = JOptionPane.showInputDialog(this, "Size? (1..50)");
             try {
                 input = Integer.parseUnsignedInt(name);
-                if(input<50&&input>0) valid=true;
+                if (input < 50 && input > 0) {
+                    valid = true;
+                }
 
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Not Valid!");
@@ -58,60 +67,27 @@ public class HexWindow extends JFrame {
                 BREIT + insets.left + insets.right,
                 HOCH + insets.top + insets.bottom));
 
-        panel = new JPanel() {
-            @Override
-            public void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                //debug
-                g.setColor(new Color(215, 215, 225));
-                g.fillRect(0, 0, BREIT, HOCH);
-                //map.drawPoints(g);
-                map.drawPolygons(g);
+        statusPanel = new StatusPanel();
+        add(statusPanel);
 
-                g.setColor(Color.black);
-                g.drawString("x/y: " + mouseX + "/" + mouseY, BREIT - 100, HOCH - 20);
-
-            }
-        };
-
-        add(panel);
         pack();
+        setMinimumSize(new Dimension(400, 400));
 
-        addMouseWheelListener(new MouseWheelListener() {
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                if (e.getWheelRotation() > 0) {
-                    a -= 3;
-                } else {
-                    a += 3;
-                }
-                map.refresh(a);
-                repaint();
-            }
+        addMouseWheelListener(mouseManager);
+
+        /*
+        addMouseListener(new MouseAdapter(){
+           @Override
+           public void mousePressed(MouseEvent e){
+               
+               System.out.println("Klick");
+               PlFactory.INIT=true;
+               repaint();
+               
+           }
         });
-
-        panel.addMouseMotionListener(new MouseMotionListener() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-
-                mouseX = e.getX();
-                mouseY = e.getY();
-                if (Map.map != null) {
-                    Map.map.updateMouse(mouseX, mouseY);
-                }
-                repaint();
-            }
-
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                mouseX = e.getX();
-                mouseY = e.getY();
-                if (Map.map != null) {
-                    Map.map.updateMouse(mouseX, mouseY);
-                }
-                repaint();
-            }
-
-        });
+         */
+        //addMouseListener(mouseManager);
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -120,6 +96,50 @@ public class HexWindow extends JFrame {
             }
         });
 
-    }
+        PlFactory.getInstance().make();
 
+    }
+    //physics, inputs, etc.
+    
+    public void tick(){
+        if(keyManager.down){
+            Map.obs.move("down", this);
+            
+        }
+        if(keyManager.up){
+            Map.obs.move("up", this);
+            
+        }
+    }
+    
+    long timecheck, delta;
+    int FPScounter;
+
+    
+//Runnable for Physics
+    ActionListener timerEnd = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent evt) {
+            FPScounter++;
+            delta=System.nanoTime()-timecheck;
+            
+            if(delta>1000000000l){
+                System.out.println("Running with TPS (set to " + TPS + ") : " + FPScounter );
+                timecheck=System.nanoTime();
+                FPScounter=0;
+            }
+            tick();
+            
+            
+            
+        }
+    };
+
+    Timer timer = new Timer(1000/TPS, timerEnd);
+    
+
+    @Override
+    public void run() {
+        timer.start();
+    }
 }
