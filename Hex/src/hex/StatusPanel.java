@@ -24,7 +24,7 @@ public class StatusPanel extends JPanel {
     public static StatusPanel sp;
     public static final int xGap = 5, yGap = 5;
     public JLabel top;
-    public GamePanel middle;
+    public MainPanel middle;
     public JLayeredPane pane;
 
     public static void refresh(){
@@ -40,7 +40,7 @@ public class StatusPanel extends JPanel {
         
 
         
-        middle = new GamePanel();
+        middle = new MainPanel();
         
 
         this.add(top, BorderLayout.PAGE_START);

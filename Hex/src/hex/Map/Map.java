@@ -11,6 +11,9 @@ import java.awt.Graphics;
 import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.Iterator;
+import myEvents.ScrollBroadcaster;
+import myEvents.ScrollEvent;
+import myEvents.ScrollListener;
 
 /**
  *
@@ -19,7 +22,7 @@ import java.util.Iterator;
 
 //newcomment
 
-public class Map {
+public class Map implements ScrollListener {
 
     public static Map map;
     public static Obs obs;
@@ -38,6 +41,7 @@ public class Map {
 
     public Map(int x, int y, int scale) {
         map = this;
+        ScrollBroadcaster.getInstance().addScrollListener(this);
           obs=new Obs();
         //System.out.println("Konstruktor");
         this.x = new Integer(x);
@@ -48,13 +52,15 @@ public class Map {
         makePolygonsForTiles();
         hookUpTiles();
     }
+    
+    @Override
+    public void scrollUpdate(ScrollEvent e){
+        refresh(e.getA());
+    }
 
     public void updateMouse(int mouseX, int mouseY) {
         this.mouseX = mouseX;
         this.mouseY = mouseY;
-        
-        
-        
         
         //debug Color Refresh
         Tile t;

@@ -13,5 +13,4 @@ import java.util.EventListener;
  */
 public interface ScrollListener extends EventListener{
     public void scrollUpdate(ScrollEvent e);
-    
 }

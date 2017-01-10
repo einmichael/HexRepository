@@ -11,18 +11,17 @@ import java.util.EventObject;
  *
  * @author faust
  */
-public class ScrollEvent extends EventObject{
-   private int a;
+public class ScrollEvent extends EventObject {
 
-  public ScrollEvent( Object source, int newA )
-  {
-    super( source );
-    this.a = newA;
-  }
+    private int a;
 
-  public int getA()
-  {
-    return a;
-  }
-    
+    public ScrollEvent(Object source, int newA) {
+        super(source);
+        this.a = newA;
+    }
+
+    public int getA() {
+        return a;
+    }
+
 }

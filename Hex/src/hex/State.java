@@ -12,17 +12,16 @@ import java.util.ArrayList;
  * @author faust
  */
 public class State {
-    
-    public boolean MapInit;
-    public boolean PlayerInit;
-    
+
+    public boolean PlInit;
+
     private String name;
-    
-    public State(String name){
+
+    public State(String name) {
         length++;
-        this.name=name;
+        this.name = name;
     }
-    
+
     private static int length;
     private final static ArrayList<State> LIST = new ArrayList<State>();
 
