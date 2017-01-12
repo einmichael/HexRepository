@@ -17,15 +17,13 @@ import javax.swing.JPanel;
  *
  * @author faust
  */
-public class GamePanel extends JPanel {
+public class MainPanel extends JPanel {
     public int mouseX, mouseY;
-    
-    
-    public GamePanel(){
+        
+    public MainPanel(){
         addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseMoved(MouseEvent e) {
-
                 mouseX = e.getX();
                 mouseY = e.getY();
                 if (Map.map != null) {
@@ -33,7 +31,6 @@ public class GamePanel extends JPanel {
                 }
                 repaint();
             }
-
             @Override
             public void mouseDragged(MouseEvent e) {
                 mouseX = e.getX();
@@ -43,25 +40,16 @@ public class GamePanel extends JPanel {
                 }
                 repaint();
             }
-
         });
-        add(new JButton("Testa<srgsdfhsdfhsfh"){
-            
+        add(new JButton("TestButton1234"){
         });
-        
-        //addMouseListener(HexWindow.mouseManager);
+                
     }
     
     public void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 //debug
-                g.setColor(new Color(215, 215, 225));
-                //g.fillRect(0, 0, BREIT, HOCH);
                 //map.drawPoints(g);
                 Map.map.drawPolygons(g);
-
-                //g.setColor(Color.black);
-                //g.drawString("x/y: " + mouseX + "/" + mouseY, BREIT - 100, HOCH - 20);
-                
             }
 }

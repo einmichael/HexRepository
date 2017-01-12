@@ -16,33 +16,39 @@ import myEvents.ScrollListener;
  * @author faust
  */
 public class Obs implements ScrollListener {
-    
-    private int x,y;
-    private int width, height;
+
+    private int x, y;
+    private int myWidth, myHeight;
+
     @Override
-    public void scrollUpdate(ScrollEvent e){
-        System.out.println("Update empfangen!!!! " +e.getA() + " " + this);
+    public void scrollUpdate(ScrollEvent e) {
+        System.out.println("Update empfangen!!!! " + e.getA() + " " + this);
     }
-    
-    public Obs(){
+
+    public Obs() {
         ScrollBroadcaster.getInstance().addScrollListener(this);
     }
-    public void render(Graphics g){
-       
+
+    //debug
+    public void render(Graphics g) {
+        
         g.setColor(Color.pink);
         g.fillRect(x, y, 15, 15);
     }
-    
-    public void move(String s, Object o){
-        switch (s){
-           case "up":
-               y--;
-           break;
-           default:
-               y++;
+
+    public void move(String s, Object o) {
+        switch (s) {
+            case "up":
+                y--;
+                break;
+            case "down":
+                y++;
+                break;
+            default:
+
         }
         StatusPanel.sp.refresh();
-        
+
     }
-    
+
 }

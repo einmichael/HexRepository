@@ -3,14 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package hex;
+package demorcm;
 
-import java.util.Observable;
+import java.util.EventObject;
 
 /**
  *
- * @author faust
+ * @author michael.faust
  */
-public class WindowNews extends Observable {
+public class myClickEvent extends EventObject {
+    
+    public myClickEvent(Object source){
+        super(source);
+    }
     
 }

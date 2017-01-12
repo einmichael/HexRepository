@@ -24,7 +24,7 @@ public class StatusPanel extends JPanel {
     public static StatusPanel sp;
     public static final int xGap = 5, yGap = 5;
     public JLabel top;
-    public GamePanel middle;
+    public MainPanel middle;
     public JLayeredPane pane;
 
     public static void refresh(){
@@ -40,7 +40,7 @@ public class StatusPanel extends JPanel {
         
 
         
-        middle = new GamePanel();
+        middle = new MainPanel();
         
 
         this.add(top, BorderLayout.PAGE_START);
@@ -52,10 +52,9 @@ public class StatusPanel extends JPanel {
             @Override
             public void mouseMoved(MouseEvent e) {
 
-                mouseX = e.getX();
-                mouseY = e.getY();
-                top.setText("x: "+ mouseX + ", y: "+mouseY);
-                repaint();
+                refreshMouse(mouseX = e.getX(),
+                mouseY = e.getY());
+                
             }
 
             @Override
@@ -66,6 +65,10 @@ public class StatusPanel extends JPanel {
         });
         //addMouseListener(HexWindow.mouseManager);
 
+    }
+    public void refreshMouse(int x, int y){
+        top.setText("x: "+ mouseX + ", y: "+mouseY);
+                repaint();
     }
 
 }
