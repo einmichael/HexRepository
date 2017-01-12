@@ -5,6 +5,8 @@
  */
 package demorcm;
 
+import demorcm.AT.ATTest;
+
 /**
  *
  * @author michael.faust
@@ -17,6 +19,7 @@ public class DemoRCM {
     public static void main(String[] args) {
         // TODO code application logic here
         new RCMWindow("Simulation");
+        new ATTest("AT");
     }
     
 }
