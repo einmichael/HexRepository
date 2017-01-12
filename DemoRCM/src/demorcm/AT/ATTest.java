@@ -25,7 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
- *
+ *narfnarfnarf
  * @author michael.faust
  */
 public class ATTest extends JFrame {
