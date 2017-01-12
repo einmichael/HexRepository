@@ -28,11 +28,11 @@ public class RCMWindow extends JFrame{
         @Override
         public void paintComponent(Graphics g){
             super.paintComponent(g);
-            g.drawImage(w35AB,0,0,null);
+            g.drawImage(w35AB,10,0,150,120,null);
             g.drawImage(linesVertimage, 50, 0, null);
             g.drawImage(linesVertimage, 50, 72, null);
             //g.drawImage(rcms150, 10, 20,300,100, null);
-             g.drawImage(w35ABfront,0,0,null);
+             g.drawImage(w35ABfront,10,0,150,120,null);
             
         }
     };
@@ -41,8 +41,8 @@ public class RCMWindow extends JFrame{
         super(s);
         linesVertimage = loadImage("/img/L123N-vert-29-72.png");
         rcms150= loadImage("/img/RCMS150.png");
-        w35AB = loadImage("/img/W60AB.png)");
-        w35ABfront = loadImage("/img/W35AB-front.png)");
+        w35AB = loadImage("/img/W35AB.png");
+        w35ABfront = loadImage("/img/W35AB-front.png");
          
         this.setLocation(250,250);
         myPanel.setPreferredSize(new Dimension(500,500));
