@@ -6,6 +6,7 @@
 package demorcm;
 
 import demorcm.AT.ATTest;
+import demorcm.AT.ATTestMap;
 
 /**
  *
@@ -20,6 +21,7 @@ public class DemoRCM {
         // TODO code application logic here
         new RCMWindow("Simulation");
         new ATTest("AT");
+        new ATTestMap("Map");
     }
     
 }

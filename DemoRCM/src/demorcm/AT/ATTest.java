@@ -119,10 +119,12 @@ public class ATTest extends JFrame {
     }
     
     public void refresh(){
-        
-        at=(AffineTransform) atTrans.clone();
-        at.concatenate(atScale);
-        
+        //Translate fix, scale angehängt!
+        //at=(AffineTransform) atTrans.clone();
+        //at.concatenate(atScale);
+        //Translate wird gescalet! Beim Scalen verschiebt sich offset
+        at=(AffineTransform) atScale.clone();
+        at.concatenate(atTrans);
         System.out.println("Trans: "+atTrans);
         System.out.println("Scale: "+atScale);
         System.out.println("at: "+at);
