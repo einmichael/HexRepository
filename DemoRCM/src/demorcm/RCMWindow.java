@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 public class RCMWindow extends JFrame{
     BufferedImage linesVertimage;
     BufferedImage rcms150;
-    BufferedImage w35AB;
+    public static BufferedImage w35AB;
     BufferedImage w35ABfront;
     
     JPanel myPanel =  new JPanel(){
