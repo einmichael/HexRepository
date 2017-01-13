@@ -12,6 +12,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -65,6 +67,19 @@ public class ATTestMap extends JFrame {
             atScale = AffineTransform.getScaleInstance(1, 1);
             refresh();
         }
+        
+        public myAT(int x, int y){
+            System.out.println("Konstruktor " + this.getClass());
+            destination = (Point2D) new Point(0, 0);
+            source = (Point2D) new Point(0, 0);
+            scale = 10;
+            tX = 0;
+            tY = 0;
+            atTrans = AffineTransform.getTranslateInstance(x,y);
+            at = new AffineTransform();
+            atScale = AffineTransform.getScaleInstance(1, 1);
+            refresh();
+        }
         public void showInfo() {
             System.out.println(" " + this);
             System.out.println("scale: " + scale + ", tX: " + tX + ", tY: " + tY);
@@ -78,7 +93,7 @@ public class ATTestMap extends JFrame {
             at = (AffineTransform) atScale.clone();
             at.concatenate(atTrans);
             
-            showInfo();
+            //showInfo();
             
         }
         public void addTrans(int x, int y) {
@@ -112,6 +127,7 @@ public class ATTestMap extends JFrame {
     public myAT mapAT;
     public myAT camAT;
     Graphics2D g2D;
+    
     public class MyPanel extends JPanel {
         public MyPanel() {
             System.out.println("Konstruktor " + this.getClass());
@@ -146,6 +162,19 @@ public class ATTestMap extends JFrame {
                     mouseX = e.getX();
                     mouseY = e.getY();
                     repaint();
+                }
+            });
+            
+            this.addComponentListener(new ComponentAdapter(){
+                @Override
+                public void componentResized(ComponentEvent e){
+                    System.out.println("MyPanel resized");
+                    if(e.getComponent().getWidth()<250){
+                        camAT.atTrans = AffineTransform.getTranslateInstance(10, 10);
+                    camAT.refresh();
+                    repaint();
+                    }
+                    
                 }
             });
         }
@@ -195,14 +224,23 @@ public class ATTestMap extends JFrame {
             g.drawString(("zu Cam  : " + tmp.getX() + "/" + tmp.getY()), mouseX + 20, mouseY + 40);
         }
     }
+    
+    public Point2D VPtmp1= (Point2D) new Point(0,0);
+    public Point2D VPtmp2= (Point2D) new Point(0,0);
+    
+    public void storeVP(Point2D p){
+        VPtmp1.setLocation(camAT.trans(50, 50));
+        VPtmp2.setLocation(mapAT.invTrans((int) VPtmp1.getX(), (int) VPtmp1.getY()));
+        p.setLocation(VPtmp2);
+    }
+    
+    
+    
     public ATTestMap(String s) {
         super(s);
         System.out.println("Konstruktor " + this.getClass());
-        mapAT = new myAT();
-        camAT = new myAT();
-        mapAT.changeScale(7);
-        System.out.println("" + mapAT.getAT());
-        System.out.println("jo");
+        mapAT = new myAT(100,100);
+        camAT = new myAT(50,50);
         this.setVisible(true);
         this.setBounds(200, 200, 400, 400);
         this.add(new MyPanel());
@@ -218,11 +256,14 @@ public class ATTestMap extends JFrame {
             public void mouseWheelMoved(MouseWheelEvent e) {
                 e.consume();
                 Point2D tmp1, tmp2=(Point2D)new Point(0,0), tmp3=(Point2D) new Point(0,0);
+                
+                 /*
                 //cam in fenster
                 tmp1 = camAT.trans(50, 50);
                 //fenster- in map-Koordinaten
                 tmp2 = (Point2D) mapAT.invTrans((int) tmp1.getX(), (int) tmp1.getY()).clone();
-                
+                */
+                storeVP(tmp2);
                 scale = mapAT.scale;
                 if (e.getWheelRotation() > 0) {
                     if (scale >= scaleMin + scaleInc) {
@@ -233,15 +274,16 @@ public class ATTestMap extends JFrame {
                 }
                 System.out.println("Scale: " + scale);
                 mapAT.changeScale(scaleDelta);
-                
+                /*
                 
                 //cam in fenster
                 tmp1 = camAT.trans(50, 50);
                 //fenster- in map-Koordinaten
                 tmp3 = mapAT.invTrans((int) tmp1.getX(), (int) tmp1.getY());
-                
-                System.out.println("vorher "+tmp2);
-                System.out.println("nachher "+tmp3);
+                */
+                storeVP(tmp3);
+                //System.out.println("vorher "+tmp2);
+                //System.out.println("nachher "+tmp3);
                 
                 mapAT.addTrans((int) (tmp3.getX()-tmp2.getX()),(int) (tmp3.getY()-tmp2.getY()));
                 repaint();
