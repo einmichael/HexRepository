@@ -18,14 +18,18 @@ import javax.swing.JPanel;
  * @author faust
  */
 public class MainPanel extends JPanel {
+    StatusPanel father;
     public int mouseX, mouseY;
         
-    public MainPanel(){
+    public MainPanel(StatusPanel statusPanel){
+        this.father=statusPanel;
         addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseMoved(MouseEvent e) {
+                
                 mouseX = e.getX();
                 mouseY = e.getY();
+                father.refreshMouse(mouseX, mouseY, mouseX+1, mouseY+2);
                 if (Map.map != null) {
                     Map.map.updateMouse(mouseX, mouseY);
                 }

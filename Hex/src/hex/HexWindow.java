@@ -16,7 +16,6 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import myEvents.ScrollBroadcaster;
@@ -34,7 +33,7 @@ public class HexWindow extends JFrame implements Runnable, ScrollListener {
     public final int BREIT = 500;
     public final int HOCH = 500;
 
-    public JLayeredPane layeredPane;
+  //  public JLayeredPane layeredPane;
     public StatusPanel statusPanel;
 
     public static int a = new Integer(50);
