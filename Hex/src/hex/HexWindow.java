@@ -107,6 +107,8 @@ public class HexWindow extends JFrame implements Runnable, ScrollListener {
                 System.exit(0);
             }
         });
+        
+        
         PlFactory.getInstance().make();
     }
     
