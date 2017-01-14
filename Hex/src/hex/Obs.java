@@ -12,14 +12,14 @@ import myEvents.ScrollEvent;
 import myEvents.ScrollListener;
 
 /**
+ * scrolling, movement, holds ats, offers trans and invtrans for ats
  *
  * @author faust
  */
 public class Obs implements ScrollListener {
 
     private int x, y;
-    private int myWidth, myHeight;
-
+   
     @Override
     public void scrollUpdate(ScrollEvent e) {
         System.out.println("Update empfangen!!!! " + e.getA() + " " + this);
