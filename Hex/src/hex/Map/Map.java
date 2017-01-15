@@ -22,10 +22,10 @@ import myEvents.ScrollListener;
 
 //newcomment
 
-public class Map implements ScrollListener {
+public class Map {
 
     public static Map map;
-    public static Obs obs;
+    //public static Obs obs;
 
     public ArrayList tiles = new ArrayList<Tile>();
     public ArrayList nodes = new ArrayList<Node>();
@@ -41,8 +41,7 @@ public class Map implements ScrollListener {
 
     public Map(int x, int y, int scale) {
         map = this;
-        ScrollBroadcaster.getInstance().addScrollListener(this);
-          obs=new Obs();
+                  
         //System.out.println("Konstruktor");
         this.x = new Integer(x);
         this.y = new Integer(y);
@@ -53,11 +52,7 @@ public class Map implements ScrollListener {
         hookUpTiles();
     }
     
-    @Override
-    public void scrollUpdate(ScrollEvent e){
-        refresh(e.getA());
-    }
-
+    
     public void updateMouse(int mouseX, int mouseY) {
         this.mouseX = mouseX;
         this.mouseY = mouseY;
@@ -82,10 +77,7 @@ public class Map implements ScrollListener {
         }
     }
 
-    public void refresh(int scale) {
-        makePoints(scale);
-        makePolygonsForTiles();
-    }
+
 
     private void hookUpTiles() {
         Tile t;
@@ -177,7 +169,7 @@ public class Map implements ScrollListener {
         while (tileIterator.hasNext()) {
             tileIterator.next().drawElement(g);
         }
-        obs.render(g);
+       // obs.render(g);
     }
 
     public int getX() {

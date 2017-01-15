@@ -37,9 +37,7 @@ public class HexWindow extends JFrame implements Runnable, ScrollListener {
     public StatusPanel statusPanel;
 
     public static int a = new Integer(50);
-    public static final int aMin= new Integer(20);
-    public static final int aInc= new Integer(5);
-    public static final int aMax= new Integer(80);
+
 
     private static Map map;
 
@@ -86,15 +84,9 @@ public class HexWindow extends JFrame implements Runnable, ScrollListener {
         addMouseWheelListener(new MouseAdapter() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
-                if (e.getWheelRotation() > 0) {
-                    if(a>=aMin+aInc)
-                    a -= aInc;
-                } else {
-                    if(a<=aMax-aInc)
-                    a += aInc;
-                }
-                //System.out.println("mouseWheelMoved" + e);
-                ScrollBroadcaster.getInstance().fire(new ScrollEvent(this, a));
+                
+                ScrollBroadcaster.getInstance().fireScrollEvent(new ScrollEvent(this, e.getWheelRotation()));
+                
                 e.getComponent().repaint();
                 e.consume();
             }
@@ -119,12 +111,14 @@ public class HexWindow extends JFrame implements Runnable, ScrollListener {
     //physics, inputs, etc.
 
     public void tick() {
+       /*
+        
         if (keyManager.down) {
             Map.obs.move("down", this);
         }
         if (keyManager.up) {
             Map.obs.move("up", this);
-        }
+        }*/
     }
 
     long timecheck, delta;
