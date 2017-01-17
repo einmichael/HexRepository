@@ -139,7 +139,8 @@ public class HexWindow extends JFrame implements Runnable, ScrollListener {
             delta = System.nanoTime() - timecheck;
 
             if (delta > 1000000000l) {
-                System.out.println("Running with TPS (set to " + TPS + ") : " + TPScounter);
+//debug                
+//System.out.println("Running with TPS (set to " + TPS + ") : " + TPScounter);
                 timecheck = System.nanoTime();
                 TPScounter = 0;
             }

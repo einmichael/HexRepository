@@ -9,6 +9,8 @@ import hex.Map.Map;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
@@ -25,32 +27,53 @@ import javax.swing.SwingUtilities;
  * @author faust
  */
 public class MainPanel extends JPanel {
-    Point2D viewPort= (Point2D) new Point(0,0);
-    
+
+    Point2D viewPort = (Point2D) new Point(0, 0);
+
     private AffineTransform old;
-    
+
     public Obs obs;
-    
+
     public StatusPanel father;
     public JLayeredPane layeredPane;
     public JButton testButton;
     public JPanel testPanel, glassPane, navigationPane, obsPane, mapPane;
     public int mouseX, mouseY;
-        
-    public MainPanel(StatusPanel statusPanel){
-        this.father=statusPanel;
-        obs=new Obs(this);
-        
+
+    public JButton jButton;
+
+    public MainPanel(StatusPanel statusPanel) {
+        this.father = statusPanel;
+        obs = new Obs(this);
+        jButton = new JButton("T") {
+
+        };
+        jButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        obs.pointTest();
+                    }
+
+                });
+            }
+
+        });
+        jButton.setBounds(100, 400, 200, 200);
+        this.add(jButton);
+
         addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                
+
                 mouseX = e.getX();
                 mouseY = e.getY();
-                
+
                 //refresht statusPanel Labels mit Maus auf Panel und Maus auf Map
-                SwingUtilities.invokeLater(new Runnable(){
-                    public void run(){
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
                         father.refreshMouse(mouseX, mouseY, obs.xToMap(mouseX), obs.yToMap(mouseY));
                     }
                 });
@@ -59,6 +82,7 @@ public class MainPanel extends JPanel {
                 }
                 repaint();
             }
+
             @Override
             public void mouseDragged(MouseEvent e) {
                 mouseX = e.getX();
@@ -69,35 +93,32 @@ public class MainPanel extends JPanel {
                 repaint();
             }
         });
-        this.addComponentListener(new ComponentAdapter(){
+        this.addComponentListener(new ComponentAdapter() {
             @Override
-            public void componentResized(ComponentEvent e){
+            public void componentResized(ComponentEvent e) {
                 shiftViewPort();
             }
         });
         shiftViewPort();
-        
-        
+
     }
-    
-    
-    
-    public void shiftViewPort(){
+
+    public void shiftViewPort() {
         //später setViewPortLocationWithMapAdjust
-        obs.setViewPortLocation(this.getWidth()/2, this.getHeight()/2);
+        obs.setViewPortLocation(this.getWidth() / 2, this.getHeight() / 2);
     }
-    
+
     public void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2D = (Graphics2D) g;
-                old=g2D.getTransform();
-                g2D.transform(obs.mapAT);
-                //debug
-                //map.drawPoints(g);
-                Map.map.drawPolygons(g);
-                
-                g2D.setTransform(old);
-                obs.render(g2D);
-               
-            }
+        super.paintComponent(g);
+        Graphics2D g2D = (Graphics2D) g;
+        old = g2D.getTransform();
+        g2D.transform(obs.mapAT);
+        //debug
+        //map.drawPoints(g);
+        Map.map.drawPolygons(g);
+
+        g2D.setTransform(old);
+        obs.render(g2D);
+
+    }
 }
