@@ -18,6 +18,7 @@ import java.awt.geom.Point2D;
 import javax.swing.JButton;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -48,8 +49,11 @@ public class MainPanel extends JPanel {
                 mouseY = e.getY();
                 
                 //refresht statusPanel Labels mit Maus auf Panel und Maus auf Map
-                father.refreshMouse(mouseX, mouseY, obs.xToMap(mouseX), obs.yToMap(mouseY));
-                
+                SwingUtilities.invokeLater(new Runnable(){
+                    public void run(){
+                        father.refreshMouse(mouseX, mouseY, obs.xToMap(mouseX), obs.yToMap(mouseY));
+                    }
+                });
                 if (Map.map != null) {
                     Map.map.updateMouse(mouseX, mouseY);
                 }

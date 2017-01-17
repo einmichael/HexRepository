@@ -17,6 +17,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import myEvents.ScrollBroadcaster;
 import myEvents.ScrollEvent;
@@ -33,7 +34,6 @@ public class HexWindow extends JFrame implements Runnable, ScrollListener {
     public final int BREIT = 500;
     public final int HOCH = 500;
 
-  //  public JLayeredPane layeredPane;
     public StatusPanel statusPanel;
 
     public static int a = new Integer(50);
@@ -45,12 +45,7 @@ public class HexWindow extends JFrame implements Runnable, ScrollListener {
 
     public static KeyManager keyManager;
 
-    public HexWindow(String s) {
-
-        super(s);
-        keyManager = new KeyManager();
-        addKeyListener(keyManager);
-        
+    private void getInput(){
         int input = new Integer(0);
         boolean valid = false;
         String name;
@@ -66,9 +61,26 @@ public class HexWindow extends JFrame implements Runnable, ScrollListener {
                 JOptionPane.showMessageDialog(this, "Not Valid!");
             }
         }
-        map = new Map(input, input, a);
+        this.input=input;
+    }
+    int input = new Integer(2);
+    public HexWindow(String s) {
+
+        super(s);
+        keyManager = new KeyManager();
+        addKeyListener(keyManager);
         
+        getInput();
+        /*test        
+        SwingUtilities.invokeLater(new Runnable (){
+          public void run(){
+              getInput();
+          }  
+        });*/
+        
+        map = new Map(input, input, a);
         ScrollBroadcaster.getInstance().addScrollListener(this);
+        
         setLocation(250, 250);
         setMinimumSize(new Dimension(400, 400));
         setVisible(true);
@@ -84,10 +96,7 @@ public class HexWindow extends JFrame implements Runnable, ScrollListener {
         addMouseWheelListener(new MouseAdapter() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
-                
                 ScrollBroadcaster.getInstance().fireScrollEvent(new ScrollEvent(this, e.getWheelRotation()));
-                
-                e.getComponent().repaint();
                 e.consume();
             }
         });
@@ -98,7 +107,6 @@ public class HexWindow extends JFrame implements Runnable, ScrollListener {
                 System.exit(0);
             }
         });
-        
         
         PlFactory.getInstance().make();
     }

@@ -11,6 +11,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import javax.swing.SwingUtilities;
 import myEvents.ScrollBroadcaster;
 import myEvents.ScrollEvent;
 import myEvents.ScrollListener;
@@ -23,16 +24,18 @@ import myEvents.ScrollListener;
  */
 public class Obs implements ScrollListener {
 
+    //map insgesamt mapAT
     public AffineTransform mapAT;
+    // mapATTrans nur Translation
     public AffineTransform mapATTrans;
-
-    public MainPanel mainPanel;
-
-    public AffineTransform VPAT;
-    private AffineTransform tmpAT;
-
+    //scale ist frisch in scale, AT wird aus Scale gebaut
     public int scale = 10;
     public int scaleMax = 20, scaleMin = 5, scaleInc = 1, scaleDelta = 0;
+    
+    //ViewPort AT
+    public AffineTransform VPAT;
+    //tmp AT
+    private AffineTransform tmpAT;
 
     public Point2D oldViewPort;
     public Point2D currentViewPort;
@@ -41,17 +44,24 @@ public class Obs implements ScrollListener {
     public Point2D src;
     public Point2D dst;
 
+   
+    
     private int mouseX, mouseY;
 
     private int x, y;
 
+    public MainPanel mainPanel;
+    
     @Override
     public void scrollUpdate(ScrollEvent e) {
         System.out.println("Update empfangen!!!! " + e.getA() + " " + this);
         //InvokeLater
-        adjustScale(e.getA());
-        debugShowATs();
-
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                adjustScale(e.getA());
+                debugShowATs();
+            }
+        });
     }
 
     public void debugShowATs() {
@@ -62,19 +72,16 @@ public class Obs implements ScrollListener {
     public Obs(MainPanel main) {
         this.mainPanel = main;
         ScrollBroadcaster.getInstance().addScrollListener(this);
-        //resizeListener von Frame nicht benötigt, eigene Methode
 
         currentViewPort = (Point2D) new Point(0, 0);
         oldViewPort = (Point2D) new Point(0, 0);
-        VPAT = new AffineTransform();
 
+        VPAT = new AffineTransform();
         mapAT = new AffineTransform();
         mapATTrans = new AffineTransform();
-
     }
 
     public void camToMap(Point2D cam, Point2D map) {
-
         //camtransform (VP)
         //danach invTransform von Map
         tmpAT = (AffineTransform) VPAT.clone();
@@ -88,24 +95,20 @@ public class Obs implements ScrollListener {
     }
 
     public int xToMap(int x) {
-
         // hin return (int) (mapAT.getScaleX()*((double) x)+mapAT.getTranslateX());
         //zurück
-        return (int) 
-                ((((double) x) - mapAT.getTranslateX())
+        return (int) ((((double) x) - mapAT.getTranslateX())
                 / mapAT.getScaleX());
     }
 
     public int yToMap(int y) {
         // hin return (int) (mapAT.getScaleY() * ((double) y) + mapAT.getTranslateY());
         //zurück
-        return (int) 
-                ((((double) y) - mapAT.getTranslateY())
+        return (int) ((((double) y) - mapAT.getTranslateY())
                 / mapAT.getScaleY());
     }
 
     public void refreshViewPort() {
-        Point2D tmp;
 
     }
 
@@ -153,14 +156,11 @@ public class Obs implements ScrollListener {
 
         refreshMapAT();
         // adjustToNewViewPort();
-
         mainPanel.repaint();
     }
 
     //debug
     public void render(Graphics g) {
-        //System.out.println("render");
-        
         //ohne verschiebung. aufruf mit transform auf g!
         g.setColor(Color.pink);
         g.fillRect(
@@ -169,12 +169,11 @@ public class Obs implements ScrollListener {
                 2, 2);
 
         g.setColor(Color.black);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 20)); 
-        g.drawString("Viewport xMap/yMap: " 
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+        g.drawString("Viewport xMap/yMap: "
                 + xToMap((int) currentViewPort.getX())
-                + "/" 
-                + yToMap((int) currentViewPort.getY())
-                , 15,35);
+                + "/"
+                + yToMap((int) currentViewPort.getY()), 15, 35);
     }
 
     public void move(String s, Object o) {
@@ -186,10 +185,7 @@ public class Obs implements ScrollListener {
                 y++;
                 break;
             default:
-
         }
         StatusPanel.sp.refresh();
-
     }
-
 }
