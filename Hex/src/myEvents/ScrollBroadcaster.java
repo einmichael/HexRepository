@@ -24,10 +24,11 @@ public class ScrollBroadcaster {
         return broadcaster;
     }
 
-    public synchronized void fire(ScrollEvent e) {
+    public synchronized void fireScrollEvent(ScrollEvent e) {
         System.out.println("Fire Event. " + this.toString());
         notifyAll(e);
     }
+   
 
     private final EventListenerList listeners = new EventListenerList();
 
@@ -42,6 +43,7 @@ public class ScrollBroadcaster {
     protected synchronized void notifyAll(ScrollEvent event) {
         for (ScrollListener l : listeners.getListeners(ScrollListener.class)) {
             l.scrollUpdate(event);
+            System.out.println(""+l);
         }
     }
 }

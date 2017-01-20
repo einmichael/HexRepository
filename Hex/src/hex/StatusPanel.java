@@ -10,65 +10,61 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import javax.swing.JLayeredPane;
+import java.awt.geom.Point2D;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 
 /**
  *
  * @author faust
  */
 public class StatusPanel extends JPanel {
-    
+
     public int mouseX, mouseY;
     public static StatusPanel sp;
     public static final int xGap = 5, yGap = 5;
-    public JLabel top;
+    public JLabel topl, topr;
+    public JPanel top;
     public MainPanel middle;
-    public JLayeredPane pane;
 
-    public static void refresh(){
+    public static void refresh() {
         sp.repaint();
     }
+
     public StatusPanel() {
-        sp=this;
+        sp = this;
         this.setLayout(new BorderLayout(xGap, yGap));
+        top = new JPanel();
+        topl = new JLabel("TOP Left", JLabel.CENTER);
+        topl.setForeground(Color.red);
+        topl.setFont(new Font("Serif", Font.BOLD, 36));
+        topr = new JLabel("TOP Right", JLabel.CENTER);
+        topr.setForeground(Color.blue);
+        topr.setFont(new Font("Serif", Font.BOLD, 36));
 
-        top = new JLabel("TOP", JLabel.CENTER);
-        top.setForeground(Color.pink);
-        top.setFont(new Font("Serif", Font.BOLD, 48));
-        
-
-        
-        middle = new MainPanel();
-        
-
+        top.setLayout(new BoxLayout(top, BoxLayout.LINE_AXIS));
+        top.add(Box.createHorizontalGlue());
+        top.setBorder(BorderFactory.createEtchedBorder(new Color(127, 127, 155), Color.black));
+        top.add(topl);
+        top.add(Box.createRigidArea(new Dimension(10, 0)));
+        top.add(topr);
+        top.add(Box.createHorizontalGlue());
         this.add(top, BorderLayout.PAGE_START);
+
+        middle = new MainPanel(this);
         this.add(middle, BorderLayout.CENTER);
         middle.setMinimumSize(new Dimension(100, 100));
-        
-        
-        addMouseMotionListener(new MouseMotionListener() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-
-                refreshMouse(mouseX = e.getX(),
-                mouseY = e.getY());
-                
-            }
-
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                
-            }
-
-        });
-        //addMouseListener(HexWindow.mouseManager);
 
     }
-    public void refreshMouse(int x, int y){
-        top.setText("x: "+ mouseX + ", y: "+mouseY);
-                repaint();
+
+    public void refreshMouse(Point2D xy, Point2D onMap) {
+        topl.setText("" + xy.getX() + "/" + xy.getY());
+        topr.setText("" + onMap.getX() + "/" + onMap.getY());
+        repaint();
     }
 
+    public MainPanel getMainPanel(){
+        return middle;
+    }
 }
