@@ -7,7 +7,9 @@ package hex.Map;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,13 +18,13 @@ import java.util.Iterator;
  *
  * @author faust
  */
-
 //newcomment
-
 public class Map {
 
     public static Map map;
     //public static Obs obs;
+
+    public Point2D startPoint;
 
     public ArrayList tiles = new ArrayList<Tile>();
     public ArrayList nodes = new ArrayList<Node>();
@@ -38,22 +40,38 @@ public class Map {
 
     public Map(int x, int y, int scale) {
         map = this;
-                  
+
         //System.out.println("Konstruktor");
         this.x = new Integer(x);
         this.y = new Integer(y);
+        startPoint = (Point2D) new Point(x / 2, y / 2);
         this.scale = scale;
         makePoints(scale);
         makeTiles();
         makePolygonsForTiles();
         hookUpTiles();
     }
-    
-    
+
+    public Point2D getStartPoint() {
+        //System.out.println(""+startPoint);
+        /*Tile tmp=
+        getTile((int) startPoint.getX(), (int) startPoint.getY());
+        Point2D tmpP = (Point2D) new Point(tmp.getX(), tmp.getY());
+        return tmpP;*/
+
+        Tile tmp
+                = getTile((int) startPoint.getX(), (int) startPoint.getY());
+        Rectangle tmpR = tmp.polygon.getBounds();
+
+        Point2D tmpP = (Point2D) new Point(tmpR.x+tmpR.width/2, tmpR.y+tmpR.height/2);
+        return tmpP;
+
+    }
+
     public void updateMouse(Point2D mouseOnMap) {
         this.mouseX = (int) mouseOnMap.getX();
         this.mouseY = (int) mouseOnMap.getY();
-        
+
         //debug Color Refresh
         Tile t;
         Iterator<Tile> tileIteratorClear = tiles.iterator();
@@ -73,8 +91,6 @@ public class Map {
 
         }
     }
-
-
 
     private void hookUpTiles() {
         Tile t;
@@ -166,7 +182,7 @@ public class Map {
         while (tileIterator.hasNext()) {
             tileIterator.next().drawElement(g);
         }
-       // obs.render(g);
+
     }
 
     public int getX() {

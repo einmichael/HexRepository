@@ -28,7 +28,7 @@ import javax.swing.SwingUtilities;
  */
 public class MainPanel extends JPanel {
 
-    Point2D viewPort = (Point2D) new Point(0, 0);
+    //Point2D viewPort = (Point2D) new Point(0, 0);
 
     Point2D currentMouse = (Point2D) new Point(0, 0);
     Point2D currentMouseOnMap = (Point2D) new Point(0, 0);
@@ -40,12 +40,8 @@ public class MainPanel extends JPanel {
     public StatusPanel father;
     public JLayeredPane layeredPane;
     public JButton testButton;
-    public JPanel testPanel, glassPane, navigationPane, obsPane, mapPane;
-    public int mouseX, mouseY;
 
     public JButton jButton;
-
-    public MouseMotionListener myMainPanelMouseMotionListener;
 
     public MainPanel(StatusPanel statusPanel) {
         this.father = statusPanel;
@@ -61,7 +57,6 @@ public class MainPanel extends JPanel {
                     public void run() {
                         obs.pointTest();
                     }
-
                 });
             }
 
@@ -69,63 +64,58 @@ public class MainPanel extends JPanel {
         jButton.setBounds(100, 400, 200, 200);
         this.add(jButton);
 
-        myMainPanelMouseMotionListener
-                = new MouseMotionListener() {
+        
+        addMouseMotionListener( new MouseMotionListener() {
             @Override
             public void mouseMoved(MouseEvent e) {
-
-                mouseX = e.getX();
-                mouseY = e.getY();
                 currentMouse.setLocation(e.getX(), e.getY());
                 refreshMouse();
-
-                //refresht statusPanel Labels mit Maus auf Panel und Maus auf Map
-                repaint();
             }
 
             @Override
             public void mouseDragged(MouseEvent e) {
                 currentMouse.setLocation(e.getX(), e.getY());
                 refreshMouse();
-
-                repaint();
             }
-        };
+        });
 
-        addMouseMotionListener(myMainPanelMouseMotionListener);
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                shiftViewPort();
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        shiftViewPort();
+                    }
+                });
             }
         });
-        shiftViewPort();
-
     }
 
     public void shiftViewPort() {
-        //später setViewPortLocationWithMapAdjust
         obs.setViewPortLocation(this.getWidth() / 2, this.getHeight() / 2);
     }
 
     public void refreshMouse() {
-        try {
-            obs.shiftPointToMap(currentMouse, currentMouseOnMap);
-        } catch (Exception e) {
-
-        }
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
+                //MausKoordinaten Fenster nach Map
+                try {
+                    obs.shiftPointToMap(currentMouse, currentMouseOnMap);
+                } catch (Exception e) {
+                }
+                //Stauspanel informieren
                 father.refreshMouse(
                         currentMouse,
                         currentMouseOnMap);
-
+                //Map informieren
+                if (Map.map != null) {
+                    Map.map.updateMouse(currentMouseOnMap);
+                }
+                repaint();
             }
         });
-        if (Map.map != null) {
-            Map.map.updateMouse(currentMouseOnMap);
-        }
-        //System.out.println("mouse one Map" + currentMouseOnMap);
+
     }
 
     public void paintComponent(Graphics g) {
@@ -139,7 +129,6 @@ public class MainPanel extends JPanel {
 
         g2D.setTransform(old);
         obs.render(g2D);
-
     }
 
     //Getter Setter

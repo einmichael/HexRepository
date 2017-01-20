@@ -52,7 +52,7 @@ public class HexWindow extends JFrame implements Runnable, ScrollListener {
             name = JOptionPane.showInputDialog(this, "Size? (1..50)");
             try {
                 input = Integer.parseUnsignedInt(name);
-                if (input < 50 && input > 0) {
+                if (input < 51 && input > 0) {
                     valid = true;
                 }
 
