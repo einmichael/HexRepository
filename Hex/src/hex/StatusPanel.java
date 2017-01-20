@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.*;
+import java.awt.geom.Point2D;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -57,10 +58,13 @@ public class StatusPanel extends JPanel {
 
     }
 
-    public void refreshMouse(int x, int y, int xM, int yM) {
-        topl.setText("" + x + "/" + y);
-        topr.setText("" + xM + "/" + yM);
+    public void refreshMouse(Point2D xy, Point2D onMap) {
+        topl.setText("" + xy.getX() + "/" + xy.getY());
+        topr.setText("" + onMap.getX() + "/" + onMap.getY());
         repaint();
     }
 
+    public MainPanel getMainPanel(){
+        return middle;
+    }
 }

@@ -38,14 +38,13 @@ public class HexWindow extends JFrame implements Runnable, ScrollListener {
 
     public static int a = new Integer(50);
 
-
     private static Map map;
 
     public int mouseX, mouseY;
 
     public static KeyManager keyManager;
 
-    private void getInput(){
+    private void getInput() {
         int input = new Integer(0);
         boolean valid = false;
         String name;
@@ -61,26 +60,21 @@ public class HexWindow extends JFrame implements Runnable, ScrollListener {
                 JOptionPane.showMessageDialog(this, "Not Valid!");
             }
         }
-        this.input=input;
+        this.input = input;
     }
     int input = new Integer(2);
+
     public HexWindow(String s) {
 
         super(s);
         keyManager = new KeyManager();
         addKeyListener(keyManager);
-        
+
         getInput();
-        /*test        
-        SwingUtilities.invokeLater(new Runnable (){
-          public void run(){
-              getInput();
-          }  
-        });*/
-        
+
         map = new Map(input, input, a);
         ScrollBroadcaster.getInstance().addScrollListener(this);
-        
+
         setLocation(250, 250);
         setMinimumSize(new Dimension(400, 400));
         setVisible(true);
@@ -107,31 +101,39 @@ public class HexWindow extends JFrame implements Runnable, ScrollListener {
                 System.exit(0);
             }
         });
-        
+
         PlFactory.getInstance().make();
     }
-    
+
     @Override
-        public void scrollUpdate(ScrollEvent e){
-            //notneeded
-    };
+    public void scrollUpdate(ScrollEvent e) {
+        //notneeded
+    }
+
+    ;
         
     //physics, inputs, etc.
 
     public void tick() {
-       /*
-        
+
         if (keyManager.down) {
-            Map.obs.move("down", this);
+            statusPanel.getMainPanel().getObs().move("down", this);
         }
         if (keyManager.up) {
-            Map.obs.move("up", this);
-        }*/
+            statusPanel.getMainPanel().getObs().move("up", this);
+        }
+        if (keyManager.left) {
+            statusPanel.getMainPanel().getObs().move("left", this);
+        }
+        if (keyManager.right) {
+            statusPanel.getMainPanel().getObs().move("right", this);
+        }
+
     }
 
     long timecheck, delta;
     int TPScounter;
-    
+
     ActionListener timerEnd = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent evt) {
@@ -149,6 +151,7 @@ public class HexWindow extends JFrame implements Runnable, ScrollListener {
     };
 
     Timer timer = new Timer(1000 / TPS, timerEnd);
+
     @Override
     public void run() {
         timer.start();

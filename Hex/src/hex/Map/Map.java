@@ -5,15 +5,12 @@
  */
 package hex.Map;
 
-import hex.Obs;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Iterator;
-import myEvents.ScrollBroadcaster;
-import myEvents.ScrollEvent;
-import myEvents.ScrollListener;
 
 /**
  *
@@ -53,9 +50,9 @@ public class Map {
     }
     
     
-    public void updateMouse(int mouseX, int mouseY) {
-        this.mouseX = mouseX;
-        this.mouseY = mouseY;
+    public void updateMouse(Point2D mouseOnMap) {
+        this.mouseX = (int) mouseOnMap.getX();
+        this.mouseY = (int) mouseOnMap.getY();
         
         //debug Color Refresh
         Tile t;

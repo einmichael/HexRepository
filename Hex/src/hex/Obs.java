@@ -10,6 +10,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import javax.swing.SwingUtilities;
@@ -32,6 +33,10 @@ public class Obs implements ScrollListener {
     //scale ist frisch in scale, AT wird aus Scale gebaut
     public int scale = 10;
     public int scaleMax = 20, scaleMin = 5, scaleInc = 1, scaleDelta = 0;
+
+    public final static int CAMERA_SPEED = 3;
+    public int cameraShiftX = new Integer(0);
+    public int cameraShiftY = new Integer(0);
 
     //ViewPort AT
     public AffineTransform VPAT;
@@ -60,6 +65,7 @@ public class Obs implements ScrollListener {
         VPAT = new AffineTransform();
         mapAT = new AffineTransform();
         mapATTrans = new AffineTransform();
+       
     }
 
     @Override
@@ -71,17 +77,16 @@ public class Obs implements ScrollListener {
             }
         });
     }
-    
+
     //Refresher
-    
     /**
      * baut MapATs nach Änderung von scale oder translates
      */
     public void refreshMapAT() {
         mapAT = AffineTransform.getScaleInstance((double) scale / 10, (double) scale / 10);
         mapAT.concatenate(mapATTrans);
+        mainPanel.repaint();
     }
-    
 
     //funktionierende Transformer
     /**
@@ -90,7 +95,7 @@ public class Obs implements ScrollListener {
      * @param pointOriginOnFrame
      * @param pointToBeChangedOnMap
      */
-    private void shiftPointToMap(Point2D pointOriginOnFrame, Point2D pointToBeChangedOnMap) throws Exception {
+    public void shiftPointToMap(Point2D pointOriginOnFrame, Point2D pointToBeChangedOnMap) throws Exception {
         Exception myException = new Exception("Exception Point2D not valid Obs.shiftPointToMap");
 
         if (pointOriginOnFrame == null) {
@@ -110,13 +115,15 @@ public class Obs implements ScrollListener {
             throw e;
         }*/
     }
-/**
- * From Map to x/y on Frame/Panel...
- * @param pointOriginOnMap
- * @param pointToBeChangedOnFrame
- * @throws Exception 
- */
-    private void shiftPointFromMap(Point2D pointOriginOnMap, Point2D pointToBeChangedOnFrame) throws Exception {
+
+    /**
+     * From Map to x/y on Frame/Panel...
+     *
+     * @param pointOriginOnMap
+     * @param pointToBeChangedOnFrame
+     * @throws Exception
+     */
+    public void shiftPointFromMap(Point2D pointOriginOnMap, Point2D pointToBeChangedOnFrame) throws Exception {
         Exception myException = new Exception("Exception Point2D not valid Obs.shiftPointFromMap");
 
         if (pointOriginOnMap == null) {
@@ -129,13 +136,15 @@ public class Obs implements ScrollListener {
         mapAT.transform(pointOriginOnMap, pointToBeChangedOnFrame);
     }
 
-    
-    //nn any more
-    
-
-
-    public void refreshViewPort() {
-
+    //ViewPort
+    public void refreshViewPortOnMap() {
+         try {
+            shiftPointToMap(currentViewPort, currentViewPortOnMap);
+        } catch (Exception e) {
+            l("" + e);
+        }
+        mainPanel.refreshMouse();
+ 
     }
 
     public void setOldViewPort() {
@@ -168,8 +177,6 @@ public class Obs implements ScrollListener {
         mainPanel.repaint();
     }
 
-    
-
     public void adjustScale(int e) {
         //alten Viewport berechnen
         setOldViewPort();
@@ -184,6 +191,7 @@ public class Obs implements ScrollListener {
 
         refreshMapAT();
         // adjustToNewViewPort();
+        refreshViewPortOnMap();
         mainPanel.repaint();
     }
 
@@ -204,6 +212,27 @@ public class Obs implements ScrollListener {
         }
         into.setLocation(tmp);
     }*/
+    
+    
+    //MapScrolling
+    
+    
+    public void scrollMap(int ShiftX, int ShiftY) {
+        //darf noch gescrollt werden?
+        
+        //scroll
+        mapATTrans.concatenate(AffineTransform.getTranslateInstance(ShiftX, ShiftY));
+        refreshMapAT();
+        //setViewPort
+        
+        //refresh
+        refreshViewPortOnMap();
+        
+        //reset cameraxSHift
+        cameraShiftX=0;
+        cameraShiftY=0;
+
+    }
     //debug
     private Point2D pointOnMap;
     private Point2D point;
@@ -213,7 +242,7 @@ public class Obs implements ScrollListener {
      *
      * @param p
      */
-    private void shiftPointToMap(Point2D p) {
+    /*public void shiftPointToMap(Point2D p) {
         pointOnMap = (Point2D) new Point(0, 0);
         point = (Point2D) p.clone();
         try {
@@ -221,7 +250,7 @@ public class Obs implements ScrollListener {
         } catch (Exception e) {
 
         }
-    }
+    }*/
 
     public int xToMap(int x) {
         // hin return (int) (mapAT.getScaleX()*((double) x)+mapAT.getTranslateX());
@@ -256,14 +285,13 @@ public class Obs implements ScrollListener {
         l("x in Map man. : " + xToMap(x));
         l("y in Map man. : " + yToMap(y));
         point = (Point2D) currentViewPort.clone();
-        shiftPointToMap(point);
         l("Point (origin)" + point);
         l("x/y in Map via AT:" + pointOnMap.getX() + "/" + pointOnMap.getY());
 
         l("testing");
 //debug throwable
-        Point2D pTest = (Point2D) new Point(1000,1000);
-        l("vorher: "+ pTest);
+        Point2D pTest = (Point2D) new Point(1000, 1000);
+        l("vorher: " + pTest);
         try {
             shiftPointToMap((Point2D) pTest.clone(), pTest);
             l("x/y in Map via AT:" + pTest.getX() + "/" + pTest.getY());
@@ -271,7 +299,7 @@ public class Obs implements ScrollListener {
             l("" + e);
 
         }
-        l("dann: "+ pTest);
+        l("dann: " + pTest);
         try {
             shiftPointFromMap((Point2D) pTest.clone(), pTest);
             l("x/y in Map via AT:" + pTest.getX() + "/" + pTest.getY());
@@ -279,7 +307,7 @@ public class Obs implements ScrollListener {
             l("" + e);
 
         }
-        l("zurück: "+ pTest);
+        l("zurück: " + pTest);
 
     }
 
@@ -323,13 +351,26 @@ public class Obs implements ScrollListener {
     public void move(String s, Object o) {
         switch (s) {
             case "up":
-                //y--;
+                cameraShiftY = -CAMERA_SPEED;
                 break;
             case "down":
-                //y++;
+                cameraShiftY = CAMERA_SPEED;
                 break;
+            case "left":
+                cameraShiftX = -CAMERA_SPEED;
+                break;
+            case "right":
+                cameraShiftX = +CAMERA_SPEED;
             default:
+
         }
-        StatusPanel.sp.refresh();
+
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                scrollMap(cameraShiftX, cameraShiftY);
+                StatusPanel.sp.refresh();
+            }
+        });
+
     }
 }
